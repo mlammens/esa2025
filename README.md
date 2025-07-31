@@ -1,8 +1,8 @@
-# esa2023
+# esa2025
 
-ESA 2023 workshop: community analysis of species, traits, phylogenies, and responses to environment
+ESA 2025 workshop: community analysis of species, traits, phylogenies, and responses to environment
 
-ESA 2023 --- SC-16 ---  Quantitative Community Ecology in R --- Portland, Oregon --- 1-4pm PDT
+ESA 2025 --- SC-16 ---  Quantitative Community Ecology in R --- Portland, Oregon --- 1-4pm PDT
 
 
 ### Installation
