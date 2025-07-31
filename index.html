@@ -68,7 +68,7 @@ class: inverse middle center big-subsection
 3\. Install packages (only once!)  
 
 
-```r
+``` r
 pkg &lt;- c('vegan', 'labdsv', 'ade4', 'ecodist', 'ape', 'picante')
 install.packages(pkg)
 ```
@@ -76,7 +76,7 @@ install.packages(pkg)
 4\. Load packages  
 
 
-```r
+``` r
 sapply(pkg, require, character.only = TRUE)
 ```
     
@@ -85,7 +85,7 @@ sapply(pkg, require, character.only = TRUE)
 5\. Load some utility functions  
 
 
-```r
+``` r
 source("https://github.com/phytomosaic/esa2022/raw/main/R/utils_color.R")
 ```
 
@@ -94,7 +94,7 @@ source("https://github.com/phytomosaic/esa2022/raw/main/R/utils_color.R")
 # Get the data
 
 
-```r
+``` r
 u &lt;- 'https://github.com/phytomosaic/esa2023/raw/main/data/veg.rda'
 u &lt;- url(u)
 load(u)
@@ -131,7 +131,7 @@ load(u)
 # Basic R syntax
 
 
-```r
+``` r
 ### assignment
 x &lt;- 10                                # objects: a scalar
 m &lt;- matrix(c(1:8,NA), nrow=3, ncol=3) # objects: a 3x3 matrix
@@ -153,7 +153,7 @@ lst$the_name                           # list item by name (data.frame column)
 # Types and classes
 
 
-```r
+``` r
 ### examples
 x1 &lt;- 1   
 x2 &lt;- 1.0 
@@ -173,7 +173,7 @@ lapply(list(x1,x2,x3,x4,x5,x6), class)
 # Handling missing elements
 
 
-```r
+``` r
 ### create matrix object
 m &lt;- matrix(c(1:8,NA), nrow=3, ncol=3) # a 3x3 matrix
 
@@ -196,7 +196,7 @@ m[is.na(m)] &lt;- 777        # assign one value to any missing values
 Ideally, everything is "text"
 
 
-```r
+``` r
 ### read csv
 x &lt;- read.csv('/path/to/your/file.csv') 
 
@@ -235,7 +235,7 @@ Specifically, `veg` is a list containing five items:
 # Load data
 
 
-```r
+``` r
 load('./data/veg.rda')  # load the object (contains multiple objects)
 xy  &lt;- veg$xy           # spatial
 spe &lt;- veg$spe          # species
@@ -265,7 +265,7 @@ class: inverse middle center big-subsection
 # Transformations
 
 
-```r
+``` r
 ### Species: express abundances as 0/1 presence/absence
 # (spe &gt; 0) * 1
 
@@ -295,7 +295,7 @@ class: inverse middle center big-subsection
 #### Define multivariate outlier function
 
 
-```r
+``` r
 `outliers` &lt;- function (x, mult=2, method='bray') {
     d       &lt;- as.matrix(vegan::vegdist(x, method=method, binary=F, diag=T, upper=T))
     diag(d) &lt;- as.numeric(1)     # avoid zero-multiplication
@@ -308,7 +308,7 @@ class: inverse middle center big-subsection
 --
 
 
-```r
+``` r
 o &lt;- outliers(spe, mult=2)
 head(o, 3)
 ```
@@ -320,7 +320,7 @@ head(o, 3)
 ## 3 0.8214233 -0.3777314      FALSE
 ```
 
-```r
+``` r
 which(o$is_outlier)
 ```
 
@@ -335,7 +335,7 @@ which(o$is_outlier)
 Species matrix must have no missings, no empty SUs, no empty species. 
 
 
-```r
+``` r
 !anyNA(spe)                    # expect TRUE, no missing values
 
 all(rowSums(spe, na.rm=T) &gt; 0) # expect TRUE, no empty sites
@@ -349,7 +349,7 @@ all(colSums(spe, na.rm=T) &gt; 0) # expect TRUE, no empty species
 
 .pull-left.w50[
 
-```r
+``` r
 ### spatial
 *plot(xy, pch=19, col='grey')
 
@@ -377,7 +377,7 @@ plot(phy, cex=0.6, no.margin=TRUE)
 
 .pull-left.w50[
 
-```r
+``` r
 ### spatial
 plot(xy, pch=19, col='grey')
 
@@ -405,7 +405,7 @@ plot(phy, cex=0.6, no.margin=TRUE)
 
 .pull-left.w50[
 
-```r
+``` r
 ### spatial
 plot(xy, pch=19, col='grey')
 
@@ -433,7 +433,7 @@ plot(phy, cex=0.6, no.margin=TRUE)
 
 .pull-left.w50[
 
-```r
+``` r
 ### spatial
 plot(xy, pch=19, col='grey')
 
@@ -461,7 +461,7 @@ plot(phy, cex=0.6, no.margin=TRUE)
 
 .pull-left.w50[
 
-```r
+``` r
 ### spatial
 plot(xy, pch=19, col='grey')
 
@@ -495,7 +495,7 @@ class: inverse middle center big-subsection
 #### How do you define "diversity"?  
 
 
-```r
+``` r
 ### Gamma (regional) diversity
 (gamma &lt;- sum(colSums(spe) &gt; 0))
 ```
@@ -505,7 +505,7 @@ class: inverse middle center big-subsection
 ```
 
 
-```r
+``` r
 ### Alpha (per-site) diversity
 alpha &lt;- rowSums(spe &gt; 0)  # within-site
 (avgalpha &lt;- mean(alpha))  # average within-site
@@ -516,7 +516,7 @@ alpha &lt;- rowSums(spe &gt; 0)  # within-site
 ```
 
 
-```r
+``` r
 ### Beta (among-site) diversity: Whittaker's
 (beta &lt;- gamma / avgalpha - 1)
 ```
@@ -530,7 +530,7 @@ alpha &lt;- rowSums(spe &gt; 0)  # within-site
 # Diversity measures (&amp;#x3B2;-diversity)
 
 
-```r
+``` r
 ### 1 -- proportion of zeros in the matrix (independent of abundance)
 propzero &lt;- sum(spe &lt; .Machine$double.eps) / prod(dim(spe))
 cat('Proportion of zeros in matrix:', propzero, '\n')
@@ -541,7 +541,7 @@ cat('Proportion of zeros in matrix:', propzero, '\n')
 ```
 
 
-```r
+``` r
 ### 2 -- "dust bunny index" of McCune and Root (2015) (uses abundances)
 dbi &lt;- 1 - mean(as.matrix(vegan::decostand(spe, method='max')))
 cat('Dust bunny index:', dbi, '\n')
@@ -552,7 +552,7 @@ cat('Dust bunny index:', dbi, '\n')
 ```
 
 
-```r
+``` r
 ### 3 -- pairs of SUs that don't share species
 z &lt;- vegan::no.shared(spe)
 propnoshare &lt;- sum(z) / length(z)
@@ -575,7 +575,7 @@ class: inverse middle center big-subsection
 .pull-left.w48[
 #### Species
 
-```r
+``` r
 d &lt;- vegdist(spe, method='bray', binary=T)
 tabasco(as.matrix(d), col=get_palette())
 ```
@@ -586,7 +586,7 @@ tabasco(as.matrix(d), col=get_palette())
 .pull-right.w48[
 #### Environment
 
-```r
+``` r
 E &lt;- vegdist(env, method='euc', binary=F)
 tabasco(as.matrix(E), col=get_palette())
 ```
@@ -645,7 +645,7 @@ How dissimilar are SUs A and C? They share no species in common...
 
 
 
-```r
+``` r
 D &lt;- stepacross(d, 'shortest', toolong = 1)
 plot(d, D, xlab = 'Original', ylab = 'Stepacross')
 ```
@@ -664,7 +664,7 @@ class: inverse middle center big-subsection
 
 ### Three different algorithms
 
-```r
+``` r
 m1 &lt;- metaMDS(D, k=2, maxit=250, try=100, trymax=101, trace=0) # NMS
 m2 &lt;- cmdscale(D, k=2, add=T)                                  # PCoA
 m3 &lt;- prcomp(spe)                                              # PCA
@@ -677,7 +677,7 @@ m3 &lt;- prcomp(spe)                                              # PCA
 # dbRDA: the Swiss army knife 
 
 
-```r
+``` r
 ### dissimilarities
 D_euc  &lt;- vegdist(spe, 'euc')  # Euclidean
 D_chi  &lt;- vegdist(spe, 'chi')  # Chi-sq
@@ -744,7 +744,7 @@ Using `scores(x, scaling = ...)`:
 # NMS: a sensible default
 
 
-```r
+``` r
 nms &lt;- vegan::metaMDS(D, k = 2, maxit = 500, try = 500, trymax = 501)
 plot(nms) # barebones -- what would you do to interpret this?
 stressplot(nms)
@@ -764,7 +764,7 @@ class: inverse middle center big-subsection
 ### Hierarchical: Ward's clustering
 
 
-```r
+``` r
 k   &lt;- 7                                          # specify number of groups
 cl  &lt;- hclust(D, method='ward.D2')                # clustering solution
 grp &lt;- cutree(cl, k)                              # group memberships
@@ -780,7 +780,7 @@ plot(cl) ; rect.hclust(cl, k, border=rainbow(k))  # plot the dendrogram
 ### Non-hierarchical: fuzzy clustering
 
 
-```r
+``` r
 install.packages(vegclust)
 require(vegclust)
 k     &lt;- 7                                         # specify number of groups
@@ -801,7 +801,7 @@ class: inverse middle center big-subsection
 #### First, define and visualize groups (arbitrary example)
 
 
-```r
+``` r
 plot(m1$points, pch=NA, asp=1)                      # visualize on NMS
 text(m1$points, labels=grp, col=as.numeric(grp))    # group memberships
 ordispider(m1, groups=grp, col=1:k)                 # group centroids
@@ -815,19 +815,18 @@ ordispider(m1, groups=grp, col=1:k)                 # group centroids
 #### PERMANOVA: test for differences in multivariate *centroid*
 
 
-```r
+``` r
 adonis2(D ~ grp, permu=99)
 ```
 
 ```
 ## Permutation test for adonis under reduced model
-## Terms added sequentially (first to last)
 ## Permutation: free
 ## Number of permutations: 99
 ## 
 ## adonis2(formula = D ~ grp, permutations = 99)
 ##          Df SumOfSqs      R2      F Pr(&gt;F)   
-## grp       1    9.510 0.20354 24.278   0.01 **
+## Model     1    9.510 0.20354 24.278   0.01 **
 ## Residual 95   37.214 0.79646                 
 ## Total    96   46.724 1.00000                 
 ## ---
@@ -845,7 +844,7 @@ adonis2(D ~ grp, permu=99)
 #### PERMDISP: test for differences in multivariate *dispersion*
 
 
-```r
+``` r
 permutest(betadisper(D, grp), pairwise=TRUE, permu=99)
 ```
 
@@ -862,9 +861,9 @@ permutest(betadisper(D, grp), pairwise=TRUE, permu=99)
 
 ```
 ##  1-2  1-3  1-4  1-5  1-6  1-7  2-3  2-4  2-5  2-6  2-7  3-4  3-5  3-6  3-7  4-5 
-## 0.62 0.06 0.04 0.02 0.04 0.30 0.45 0.19 0.07 0.46 0.37 0.01 0.01 0.47 0.02 0.43 
+## 0.64 0.07 0.03 0.01 0.01 0.19 0.53 0.12 0.04 0.42 0.28 0.01 0.01 0.46 0.01 0.39 
 ##  4-6  4-7  5-6  5-7  6-7 
-## 0.05 0.43 0.02 0.16 0.10
+## 0.02 0.51 0.02 0.09 0.08
 ```
 
 ---
@@ -874,14 +873,14 @@ permutest(betadisper(D, grp), pairwise=TRUE, permu=99)
 #### Can use categorical and/or continuous predictors
 
 
-```r
+``` r
 adonis2(D ~ grp + elevation + clay + silt + conductivity, permu=99)
 ```
 
 #### Blocked design: permutations must occur *within* strata
 
 
-```r
+``` r
 blk &lt;- factor(letters[sample(rep(1:12,len=nrow(env)))]) # arbitrary 'blocks'
 pm  &lt;- how(nperm=999)             # setup permutation object
 setBlocks(pm) &lt;- blk              # permute only *within* blocks
@@ -900,7 +899,7 @@ class: inverse middle center big-subsection
 #### Real groups
 
 
-```r
+``` r
 iv  &lt;- labdsv::indval(spe, grp) # indicator species analysis for *real* groups
 summary(iv)                     # IndVal observed
 ```
@@ -947,7 +946,7 @@ summary(iv)                     # IndVal observed
 #### Random groups
 
 
-```r
+``` r
 rnd &lt;- sample(grp, length(grp), replace=T) # define random groups by bootstrapping
 ivr &lt;- labdsv::indval(spe, rnd) # indicator species analysis for *random* groups
 summary(ivr)                    # IndVal expected at random
@@ -964,7 +963,7 @@ summary(ivr)                    # IndVal expected at random
 #### Null expectation, setting alpha = 0.05
 
 
-```r
+``` r
 ceiling(ncol(spe) * 0.05)
 ```
 
@@ -982,7 +981,7 @@ class: inverse middle center big-subsection
 # Community traits
 
 
-```r
+``` r
 head(tra, 4)
 ```
 
@@ -1010,7 +1009,7 @@ head(tra, 4)
 
 .pull-left.w50[
 
-```r
+``` r
 ### Euclidean trait dissimilarity
 ###   (traits already scaled 0-1)
 Dt  &lt;- dist(tra, method='euc') 
@@ -1042,7 +1041,7 @@ text(0.9, -4, 'Convergent')
 .pull-left.w50[
 #### (Weighted) mean trait value per SU
 
-```r
+``` r
 ### function to make CWM matrix
 `makecwm` &lt;- function (spe, tra) {
   spe &lt;- as.matrix(spe)
@@ -1075,7 +1074,7 @@ tabasco(cwm, col=get_palette())
 .pull-left.w50[
 #### Admits nonlinear trait-enviro relationship
 
-```r
+``` r
 ### NMS based on abundance-weighted traits
 m &lt;- metaMDS(cwm, 'altGower', k=2, trace=0)
 
@@ -1105,7 +1104,7 @@ o &lt;- ordisurf(m, env$k, col=2, add=T)
 ### the RLQ method
 
 
-```r
+``` r
 require(ade4)
 o_spe &lt;- dudi.coa(spe, F) # Correspondence Analysis
 o_env &lt;- dudi.hillsmith(env, F, row.w = o_spe$lw)
@@ -1129,7 +1128,7 @@ randtest(r)
 #### Trait correlations
 
 
-```r
+``` r
 fourthcorner.rlq(r, type='Q.axes')
 ```
 
@@ -1205,7 +1204,7 @@ fourthcorner.rlq(r, type='Q.axes')
 #### Environment correlations
 
 
-```r
+``` r
 fourthcorner.rlq(r, type='R.axes')
 ```
 
@@ -1281,7 +1280,7 @@ class: inverse middle center big-subsection
 # Community phylogenetics: basic plotting
 
 
-```r
+``` r
 par(mfrow=c(1,3), mar=c(0,0,0,0), oma=c(0,0,0,0))           # plotting parameters
 plot(phy, cex=0.75, no.margin=T)                            # basic plotting
 plot(phy, cex=0.75, tip.color=colvec(tra$lfp), no.margin=T) # color labels by traits
@@ -1299,7 +1298,7 @@ tiplabels(pch=21, bg = c(tra$perennial), adj=30)
 
 .pull-left.w50[
 
-```r
+``` r
 ### phylogenetic distance matrix
 Dp  &lt;- cophenetic(phy) 
 
@@ -1348,7 +1347,7 @@ phy_div &lt;-
 # Phylogenetic diversity - beta
 
 
-```r
+``` r
 ### correlation between phylogenetic and taxonomic beta-diversity
 Dp &lt;- picante::phylosor(spe, phy) # phylogenetic distances
 protest(Dp, D)                    # procrustes correlation
@@ -1374,7 +1373,7 @@ protest(Dp, D)                    # procrustes correlation
 # Phylogenetic signal
 
 
-```r
+``` r
 sapply(tra, FUN=function(j){
   names(j) &lt;- rownames(tra)
   round(picante::phylosignal(j, ape::multi2di(phy)), 4)})
@@ -1411,7 +1410,7 @@ class: inverse middle center big-subsection
 # Mantel test
 
 
-```r
+``` r
 E &lt;- dist(xy)                              # spatial distance matrix
 vegan::mantel(D, E, method = 'spearman')   # spearman *rank* correlation
 ```
@@ -1434,7 +1433,7 @@ vegan::mantel(D, E, method = 'spearman')   # spearman *rank* correlation
 ```
 
 
-```r
+``` r
 ecodist::mantel(D ~ E, mrank = T) # alternative with useful bootstrap CIs
 ```
 
@@ -1443,7 +1442,7 @@ ecodist::mantel(D ~ E, mrank = T) # alternative with useful bootstrap CIs
 # Mantel correlogram
 
 
-```r
+``` r
 plot(vegan::mantel.correlog(D, E, cutoff=F, r.type='spearman', nperm=99, mult='holm'))
 ```
 
@@ -1455,7 +1454,7 @@ plot(vegan::mantel.correlog(D, E, cutoff=F, r.type='spearman', nperm=99, mult='h
 
 .pull-left[
 
-```r
+``` r
 # species dissimilarities are related 
 #  to space (extremely weakly) and
 #   potassium (moderately)
@@ -1483,7 +1482,7 @@ ecodist::MRM(
 
 .pull-right[
 
-```r
+``` r
 # abundance of cosmopolitan bulrush 
 #  is NOT related to space, but is 
 #   related to potassium (moderately)
@@ -1548,7 +1547,7 @@ class: inverse middle center big-subsection
 PCNM: principle coordinates of neighbor matrices
 
 
-```r
+``` r
 E   &lt;- dist(xy)            # euclidean distances between sites
 pc  &lt;- pcnm(E)             # principal coordinates of neighbor matrices
 ```
@@ -1560,7 +1559,7 @@ pc  &lt;- pcnm(E)             # principal coordinates of neighbor matrices
 # PCNM
 
 
-```r
+``` r
 rs &lt;- rowSums(spe) / sum(spe)      # sites weighted by abundances
 pc &lt;- pcnm(E, w=rs)                # *weighted* PCNMs
 vp &lt;- varpart(D, env, vegan::scores(pc))  # variation partitioning
@@ -1574,7 +1573,7 @@ vp &lt;- varpart(D, env, vegan::scores(pc))  # variation partitioning
 
 .pull-left[
 
-```r
+``` r
 ### broad and local structure
 pc_broad &lt;- vegan::scores(pc)[,1:10]
 pc_local &lt;- vegan::scores(pc)[,11:59]
@@ -1592,7 +1591,7 @@ vp       &lt;- varpart(D, env, pc_broad, pc_local)
 
 .pull-left[
 
-```r
+``` r
 ### soil physical, soil chemistry, and spatial predictors
 vp &lt;- varpart(
   D,                               # dissimilarities
@@ -1622,11 +1621,11 @@ class: inverse middle center big-subsection
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="../macros.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false,
-"ratio": "16:9",
-"click": true
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false,
+  "ratio": "16:9",
+  "click": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
