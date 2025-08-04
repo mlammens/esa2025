@@ -1,8 +1,8 @@
 ---
-title: "Workshop in R"
-subtitle: "Washington State University 2024"
-author: "Rob Smith"
-date: "2024-04-04"
+title: "Quantitative Community Ecology in R"
+subtitle: "ESA 2025"
+author: "Matt Aiello-Lammens, Sarah Supp, Rob Smith, many others"
+date: "2025-08-10"
 output:
   xaringan::moon_reader:
     css: ['default', 'widths.css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css']
