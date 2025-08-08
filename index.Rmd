@@ -80,6 +80,18 @@ class: inverse middle center big-subsection
 
 ---
 
+# Introductions
+
+1\. Name 
+
+2\. Institution/Organization
+
+3\. Fave organism or ecosystem
+
+4\. What are you working on right now (or want to work on) that you'd like to apply methods from this workshop to? Could be a project a study system, or just an idea.
+
+---
+
 # Software installation
 
 1\. Download and install R from: https://cran.r-project.org/  
