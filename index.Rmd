@@ -101,7 +101,7 @@ class: inverse middle center big-subsection
 3\. Install packages (only once!)  
 
 ```{r pkg-load-01, eval = FALSE}
-pkg <- c('vegan', 'labdsv', 'ade4', 'ecodist', 'ape', 'picante')
+pkg <- c('vegan', 'betapart', 'labdsv', 'ade4', 'ecodist', 'ape', 'picante')
 install.packages(pkg)
 ```
 
@@ -112,7 +112,7 @@ sapply(pkg, require, character.only = TRUE)
 ```
     
 ```{r pkg-load-03, eval = TRUE, echo = FALSE}
-pkg <- c('vegan', 'labdsv', 'ade4', 'ecodist', 'ape', 'picante')
+pkg <- c('vegan', 'betapart', 'labdsv', 'ade4', 'ecodist', 'ape', 'picante')
 snk <- capture.output(sapply(pkg, require, character.only = TRUE))
 ```
 
@@ -166,6 +166,12 @@ load(u)
 ### assignment
 x <- 10                                # objects: a scalar
 m <- matrix(c(1:8,NA), nrow=3, ncol=3) # objects: a 3x3 matrix
+df <- data.frame(                      # objects: a data frame
+                 species = c("cewa", "amro", "blja"), 
+                 count = c(48, NA, 3),
+                 month = c(2, 2, 2)
+  )
+
 f <- function(a, b) { a + b }          # functions
 e <- new.env()                         # environments
 
@@ -212,6 +218,9 @@ is.na(m[1,1])
 is.na(m[2,2])
 is.na(m[3,3])
 is.na(m)
+
+na_matrix <- is.na(df)
+na_count <- sum(is.na(df))
 
 ### replacing missings
 m[is.na(m)] <- 777        # assign one value to any missing values
@@ -356,10 +365,10 @@ all(colSums(spe, na.rm=T) > 0) # expect TRUE, no empty species
 ### spatial
 plot(xy, pch=19, col='grey') #<<
 
-### species
+### species (abundances shown as colors)
 vegan::tabasco(spe, col=get_palette())
 
-### environment
+### environment (normalized vals shown as colors)
 vegan::tabasco(env, col=get_palette())
 
 ### traits
@@ -508,18 +517,22 @@ class: inverse middle center big-subsection
 
 ```{r div-01, eval = TRUE, echo = TRUE}
 ### Gamma (regional) diversity
-(gamma <- sum(colSums(spe) > 0))
+gamma <- sum(colSums(spe) > 0)
+gamma
 ```
 
 ```{r div-02, eval = TRUE, echo = TRUE}
 ### Alpha (per-site) diversity
 alpha <- rowSums(spe > 0)  # within-site
-(avgalpha <- mean(alpha))  # average within-site
+avgalpha <- mean(alpha) # average within-site
+
+avgalpha
 ```
 
 ```{r div-03, eval = TRUE, echo = TRUE}
 ### Beta (among-site) diversity: Whittaker's
-(beta <- gamma / avgalpha - 1)
+beta <- gamma / avgalpha - 1
+beta
 ```
 
 ---
@@ -569,6 +582,66 @@ E <- vegdist(env, method='euc', binary=F)
 tabasco(as.matrix(E), col=get_palette())
 ```
 ]
+
+---
+
+# Dissimilarity Metrics for &#x3B2;-diversity
+The specific measure used might depend on your particular ecological question, your data collection methods, or on the variable types you are working with.
+
+High values == more dissimilar (different)
+
+Low values == more similar (same)
+
+
+**Whittaker** - variation in species composition across multiple sites.
+
+**Jaccard** - focuses on shared species, using presence-absence data only. Range 0-1.
+
+**Bray-Curtis** - considers species composition and abundance. Range 0-1.
+
+**Gower** - measures general dissimilarity and can be used with continuous, ordinal, or categorical data. Values may appear smaller compared to Jaccard or Bray-Curtis results as it is more conservative (normalizes differences and downweights minor differences in pres-abs)
+
+---
+
+# Dissimilarity Metrics Example Code
+The specific measure used might depend on your particular ecological question, your data collection methods, or on the variable types you are working with.
+
+
+**Jaccard** - focuses on shared species, using presence-absence data only.
+```{r}
+jaccard <- vegdist(spe, method = "jaccard")
+```
+
+**Bray-Curtis** - considers species composition and abundance.
+```{r}
+bray_curtis <- vegdist(spe, method = "bray")
+```
+
+**Gower** - measures general dissimilarity and can be used with continuous, ordinal, or categorical data.
+```{r}
+gower <- vegdist(spe, method = "gower")
+```
+
+---
+
+# Partitioning turnover and nestedness
+
+**Turnover** is related to species replacement across sites (or time)
+
+**Nestedness** is the proportion of species that are subset of the species that occur at another site (or time period). In other words, are the species at one site found in another site?
+
+```{r}
+# Calculate beta diversity (Uniqueness and Nestedness)
+beta_diversity <- betapart::beta.pair(spe)
+```
+
+<u> There are three items in the list output. </u>
+
+**beta.sim**: turnover component; represents dissimilarity due to species turnover/replacement. High SIM suggests species replacement is a main driver of site differences (not richness)
+
+**beta.sne**: nestedness component; represents dissimilarity due to shared species or richness differences. High SNE suggests species loss and nestedness (richness differences) are main drivers of site differences.
+
+**beta.sor**: total dissimilarity, using Sorenson or Jaccard dissimilarity
 
 ---
 
