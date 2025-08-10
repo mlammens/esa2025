@@ -119,7 +119,7 @@ snk <- capture.output(sapply(pkg, require, character.only = TRUE))
 5\. Load some utility functions  
 
 ```{r source-utils, eval = FALSE}
-source("https://github.com/phytomosaic/esa2022/raw/main/R/utils_color.R")
+source("https://github.com/mlammens/esa2025/raw/main/R/utils_color.R")
 ```
 
 ---
@@ -127,7 +127,7 @@ source("https://github.com/phytomosaic/esa2022/raw/main/R/utils_color.R")
 # Get the data
 
 ```{r get-dataset-gh, eval=FALSE}
-u <- 'https://github.com/phytomosaic/esa2023/raw/main/data/veg.rda'
+u <- 'https://github.com/mlammens/esa2025/raw/main/data/veg.rda'
 u <- url(u)
 load(u)
 ```
@@ -633,6 +633,8 @@ gower <- vegdist(spe, method = "gower")
 ```{r}
 # Calculate beta diversity (Uniqueness and Nestedness)
 beta_diversity <- betapart::beta.pair(spe)
+# spe_pa <- vegan::decostand(spe, method = "pa")
+# beta_diversity <- betapart::beta.pair(spe_pa)
 ```
 
 <u> There are three items in the list output. </u>
